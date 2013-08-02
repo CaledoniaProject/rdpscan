@@ -152,7 +152,7 @@ boolean tcp_connect(rdpTcp* tcp, const char* hostname, uint16 port)
 
 	if (tcp->sockfd == -1)
 	{
-		printf("unable to connect to %s:%s\n", hostname, servname);
+//		printf("unable to connect to %s:%s\n", hostname, servname);
 		return false;
 	}
 

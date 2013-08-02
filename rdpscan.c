@@ -48,8 +48,8 @@ int main(int argc, char* argv[])
 
     char *combinations[][4] = {
         // host, domain, user, cred
-        { "192.168.56.101", NULL, "abc", "abc" },
-        { "192.168.56.102", NULL, "ddd", "ddd" }
+        { "192.168.56.103", NULL, "abc", "abc" },
+        { "192.168.56.103", NULL, "ddd", "ddd" }
     };
 
     for (i = 0; i < sizeof (combinations) / sizeof (char*[4]); ++i)
@@ -61,8 +61,6 @@ int main(int argc, char* argv[])
         instance->VerifyCertificate    = xf_verify_certificate;
 
         freerdp_context_new(instance);
-
-        instance->settings->authentication_only = true;
 
         instance->settings->hostname = combinations[i][0];
         instance->settings->domain   = combinations[i][1];

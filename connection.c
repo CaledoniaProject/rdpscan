@@ -74,7 +74,7 @@ boolean rdp_client_connect(rdpRdp* rdp)
 
 	if (nego_connect(rdp->nego) != true)
 	{
-		printf("Error: protocol security negotiation failure\n");
+//		printf("Error: protocol security negotiation failure\n");
 		return false;
 	}
 

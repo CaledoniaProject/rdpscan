@@ -60,9 +60,6 @@ struct rdp_certificate_data
 
 struct rdp_certificate_store
 {
-	FILE* fp;
-	char* path;
-	char* file;
 	rdpSettings* settings;
 	rdpCertificateData* certificate_data;
 };

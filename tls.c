@@ -242,8 +242,8 @@ boolean tls_verify_certificate(rdpTls* tls, CryptoCert cert, char* hostname)
 	char** alt_names;
 	int alt_names_count;
 	int* alt_names_lengths;
-	boolean certificate_status;
-	boolean hostname_match = false;
+	boolean certificate_status = true;
+	boolean hostname_match     = false;
 	rdpCertificateData* certificate_data;
 
 	/* ignore certificate verification if user explicitly required it (discouraged) */
@@ -253,9 +253,6 @@ boolean tls_verify_certificate(rdpTls* tls, CryptoCert cert, char* hostname)
 	/* if user explicitly specified a certificate name, use it instead of the hostname */
 	if (tls->settings->certificate_name)
 		hostname = tls->settings->certificate_name;
-
-	/* attempt verification using OpenSSL and the ~/.freerdp/certs certificate store */
-	certificate_status = x509_verify_certificate(cert, tls->certificate_store->path);
 
 	/* verify certificate name match */
 	certificate_data = crypto_get_certificate_data(cert->px509, hostname);
