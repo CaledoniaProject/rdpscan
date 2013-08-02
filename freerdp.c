@@ -18,9 +18,9 @@
  */
 
 #include "rdp.h"
-#include "input.h"
+//#include "input.h"
 #include "update.h"
-#include "surface.h"
+//#include "surface.h"
 #include "transport.h"
 #include "connection.h"
 
@@ -98,7 +98,7 @@ boolean freerdp_check_fds(freerdp* instance)
 
 void freerdp_send_keep_alive(freerdp* instance)
 {
-	input_send_synchronize_event(instance->context->rdp->input, 0);
+//	input_send_synchronize_event(instance->context->rdp->input, 0);
 }
 
 static int freerdp_send_channel_data(freerdp* instance, int channel_id, uint8* data, int size)
@@ -139,7 +139,7 @@ void freerdp_context_new(freerdp* instance)
 	rdpRdp* rdp;
 
 	rdp = rdp_new(instance);
-	instance->input = rdp->input;
+//	instance->input = rdp->input;
 	instance->update = rdp->update;
 	instance->settings = rdp->settings;
 
@@ -153,7 +153,7 @@ void freerdp_context_new(freerdp* instance)
 	instance->update->secondary->context = instance->context;
 	instance->update->altsec->context = instance->context;
 
-	instance->input->context = instance->context;
+//	instance->input->context = instance->context;
 
 	IFCALL(instance->ContextNew, instance, instance->context);
 }

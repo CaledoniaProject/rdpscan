@@ -881,7 +881,7 @@ rdpRdp* rdp_new(freerdp* instance)
 
 		rdp->transport   = transport_new(rdp->settings);
 		rdp->license     = license_new(rdp);
-		rdp->input       = input_new(rdp);
+//		rdp->input       = input_new(rdp);
 		rdp->update      = update_new(rdp);
 		rdp->fastpath    = fastpath_new(rdp);
 		rdp->nego        = nego_new(rdp->transport);
@@ -910,7 +910,7 @@ void rdp_free(rdpRdp* rdp)
 		settings_free(rdp->settings);
 		transport_free(rdp->transport);
 		license_free(rdp->license);
-		input_free(rdp->input);
+//		input_free(rdp->input);
 		update_free(rdp->update);
 		fastpath_free(rdp->fastpath);
 		nego_free(rdp->nego);

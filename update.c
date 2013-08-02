@@ -18,7 +18,7 @@
  */
 
 #include "update.h"
-#include "surface.h"
+//#include "surface.h"
 #include <freerdp/utils/rect.h>
 #include <freerdp/codec/bitmap.h>
 
@@ -335,7 +335,7 @@ void update_reset_state(rdpUpdate* update)
 
 	primary->order_info.orderType = ORDER_TYPE_PATBLT;
 	altsec->switch_surface.bitmapId = SCREEN_BITMAP_SURFACE;
-	IFCALL(altsec->SwitchSurface, update->context, &(altsec->switch_surface));
+//	IFCALL(altsec->SwitchSurface, update->context, &(altsec->switch_surface));
 }
 
 static void update_begin_paint(rdpContext* context)
@@ -403,24 +403,24 @@ static void update_send_surface_command(rdpContext* context, STREAM* s)
 
 static void update_send_surface_bits(rdpContext* context, SURFACE_BITS_COMMAND* surface_bits_command)
 {
-	STREAM* s;
-	rdpRdp* rdp = context->rdp;
-
-	s = fastpath_update_pdu_init(rdp->fastpath);
-	stream_check_size(s, SURFCMD_SURFACE_BITS_HEADER_LENGTH + (int) surface_bits_command->bitmapDataLength);
-	update_write_surfcmd_surface_bits_header(s, surface_bits_command);
-	stream_write(s, surface_bits_command->bitmapData, surface_bits_command->bitmapDataLength);
-	fastpath_send_update_pdu(rdp->fastpath, FASTPATH_UPDATETYPE_SURFCMDS, s);
+//	STREAM* s;
+//	rdpRdp* rdp = context->rdp;
+//
+//	s = fastpath_update_pdu_init(rdp->fastpath);
+//	stream_check_size(s, SURFCMD_SURFACE_BITS_HEADER_LENGTH + (int) surface_bits_command->bitmapDataLength);
+//	update_write_surfcmd_surface_bits_header(s, surface_bits_command);
+//	stream_write(s, surface_bits_command->bitmapData, surface_bits_command->bitmapDataLength);
+//	fastpath_send_update_pdu(rdp->fastpath, FASTPATH_UPDATETYPE_SURFCMDS, s);
 }
 
 static void update_send_surface_frame_marker(rdpContext* context, SURFACE_FRAME_MARKER* surface_frame_marker)
 {
-	STREAM* s;
-	rdpRdp* rdp = context->rdp;
-
-	s = fastpath_update_pdu_init(rdp->fastpath);
-	update_write_surfcmd_frame_marker(s, surface_frame_marker->frameAction, surface_frame_marker->frameId);
-	fastpath_send_update_pdu(rdp->fastpath, FASTPATH_UPDATETYPE_SURFCMDS, s);
+//	STREAM* s;
+//	rdpRdp* rdp = context->rdp;
+//
+//	s = fastpath_update_pdu_init(rdp->fastpath);
+//	update_write_surfcmd_frame_marker(s, surface_frame_marker->frameAction, surface_frame_marker->frameId);
+//	fastpath_send_update_pdu(rdp->fastpath, FASTPATH_UPDATETYPE_SURFCMDS, s);
 }
 
 static void update_send_synchronize(rdpContext* context)

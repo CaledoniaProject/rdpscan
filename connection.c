@@ -19,7 +19,7 @@
 
 #include "per.h"
 #include "info.h"
-#include "input.h"
+//#include "input.h"
 
 #include "connection.h"
 
@@ -456,7 +456,7 @@ boolean rdp_client_connect_demand_active(rdpRdp* rdp, STREAM* s)
 	if (!rdp_send_confirm_active(rdp))
 		return false;
 
-	input_register_client_callbacks(rdp->input);
+//	input_register_client_callbacks(rdp->input);
 
 	/**
 	 * The server may request a different desktop size during Deactivation-Reactivation sequence.

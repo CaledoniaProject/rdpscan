@@ -26,7 +26,7 @@
 #include "orders.h"
 #include "per.h"
 #include "update.h"
-#include "surface.h"
+//#include "surface.h"
 
 #include "fastpath.h"
 
@@ -184,7 +184,7 @@ static void fastpath_recv_update(rdpFastPath* fastpath, uint8 updateCode, uint32
 			break;
 
 		case FASTPATH_UPDATETYPE_SURFCMDS:
-			update_recv_surfcmds(update, size, s);
+//			update_recv_surfcmds(update, size, s);
 			break;
 
 		case FASTPATH_UPDATETYPE_PTR_NULL:
@@ -349,7 +349,7 @@ static boolean fastpath_recv_input_event_scancode(rdpFastPath* fastpath, STREAM*
 	if ((eventFlags & FASTPATH_INPUT_KBDFLAGS_EXTENDED))
 		flags |= KBD_FLAGS_EXTENDED;
 
-	IFCALL(fastpath->rdp->input->KeyboardEvent, fastpath->rdp->input, flags, code);
+//	IFCALL(fastpath->rdp->input->KeyboardEvent, fastpath->rdp->input, flags, code);
 
 	return true;
 }
@@ -367,7 +367,7 @@ static boolean fastpath_recv_input_event_mouse(rdpFastPath* fastpath, STREAM* s,
 	stream_read_uint16(s, xPos); /* xPos (2 bytes) */
 	stream_read_uint16(s, yPos); /* yPos (2 bytes) */
 
-	IFCALL(fastpath->rdp->input->MouseEvent, fastpath->rdp->input, pointerFlags, xPos, yPos);
+//	IFCALL(fastpath->rdp->input->MouseEvent, fastpath->rdp->input, pointerFlags, xPos, yPos);
 
 	return true;
 }
@@ -385,14 +385,14 @@ static boolean fastpath_recv_input_event_mousex(rdpFastPath* fastpath, STREAM* s
 	stream_read_uint16(s, xPos); /* xPos (2 bytes) */
 	stream_read_uint16(s, yPos); /* yPos (2 bytes) */
 
-	IFCALL(fastpath->rdp->input->ExtendedMouseEvent, fastpath->rdp->input, pointerFlags, xPos, yPos);
+//	IFCALL(fastpath->rdp->input->ExtendedMouseEvent, fastpath->rdp->input, pointerFlags, xPos, yPos);
 
 	return true;
 }
 
 static boolean fastpath_recv_input_event_sync(rdpFastPath* fastpath, STREAM* s, uint8 eventFlags)
 {
-	IFCALL(fastpath->rdp->input->SynchronizeEvent, fastpath->rdp->input, eventFlags);
+//	IFCALL(fastpath->rdp->input->SynchronizeEvent, fastpath->rdp->input, eventFlags);
 
 	return true;
 }
@@ -413,7 +413,7 @@ static boolean fastpath_recv_input_event_unicode(rdpFastPath* fastpath, STREAM* 
 	else
 		flags |= KBD_FLAGS_DOWN;
 
-	IFCALL(fastpath->rdp->input->UnicodeKeyboardEvent, fastpath->rdp->input, flags, unicodeCode);
+//	IFCALL(fastpath->rdp->input->UnicodeKeyboardEvent, fastpath->rdp->input, flags, unicodeCode);
 
 	return true;
 }

@@ -25,7 +25,6 @@
 #include "fastpath.h"
 #include "tpdu.h"
 #include "nego.h"
-#include "input.h"
 #include "update.h"
 #include "license.h"
 #include "errinfo.h"
@@ -124,7 +123,7 @@ struct rdp_rdp
 	freerdp* instance;
 	struct rdp_mcs* mcs;
 	struct rdp_nego* nego;
-	struct rdp_input* input;
+//	struct rdp_input* input;
 	struct rdp_update* update;
 	struct rdp_fastpath* fastpath;
 	struct rdp_license* license;
