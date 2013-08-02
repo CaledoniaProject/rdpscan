@@ -19,7 +19,7 @@
 
 #include "rdp.h"
 //#include "input.h"
-#include "update.h"
+//#include "update.h"
 //#include "surface.h"
 #include "transport.h"
 #include "connection.h"
@@ -140,18 +140,18 @@ void freerdp_context_new(freerdp* instance)
 
 	rdp = rdp_new(instance);
 //	instance->input = rdp->input;
-	instance->update = rdp->update;
+//	instance->update = rdp->update;
 	instance->settings = rdp->settings;
 
 	instance->context = (rdpContext*) xzalloc(instance->context_size);
 	instance->context->instance = instance;
 	instance->context->rdp = rdp;
 
-	instance->update->context = instance->context;
-	instance->update->pointer->context = instance->context;
-	instance->update->primary->context = instance->context;
-	instance->update->secondary->context = instance->context;
-	instance->update->altsec->context = instance->context;
+//	instance->update->context = instance->context;
+//	instance->update->pointer->context = instance->context;
+//	instance->update->primary->context = instance->context;
+//	instance->update->secondary->context = instance->context;
+//	instance->update->altsec->context = instance->context;
 
 //	instance->input->context = instance->context;
 

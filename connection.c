@@ -468,7 +468,7 @@ boolean rdp_client_connect_demand_active(rdpRdp* rdp, STREAM* s)
 	}
 
 	rdp->state = CONNECTION_STATE_FINALIZATION;
-	update_reset_state(rdp->update);
+//	update_reset_state(rdp->update);
 
 	rdp_client_connect_finalize(rdp);
 
@@ -671,7 +671,7 @@ boolean rdp_server_accept_confirm_active(rdpRdp* rdp, STREAM* s)
 		return false;
 
 	rdp->state = CONNECTION_STATE_ACTIVE;
-	update_reset_state(rdp->update);
+//	update_reset_state(rdp->update);
 
 	if (!rdp_send_server_synchronize_pdu(rdp))
 		return false;

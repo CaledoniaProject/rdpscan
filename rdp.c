@@ -489,7 +489,7 @@ void rdp_recv_data_pdu(rdpRdp* rdp, STREAM* s)
 	switch (type)
 	{
 		case DATA_PDU_TYPE_UPDATE:
-			update_recv(rdp->update, s);
+//			update_recv(rdp->update, s);
 			break;
 
 		case DATA_PDU_TYPE_CONTROL:
@@ -497,7 +497,7 @@ void rdp_recv_data_pdu(rdpRdp* rdp, STREAM* s)
 			break;
 
 		case DATA_PDU_TYPE_POINTER:
-			update_recv_pointer(rdp->update, s);
+//			update_recv_pointer(rdp->update, s);
 			break;
 
 		case DATA_PDU_TYPE_INPUT:
@@ -511,7 +511,7 @@ void rdp_recv_data_pdu(rdpRdp* rdp, STREAM* s)
 			break;
 
 		case DATA_PDU_TYPE_PLAY_SOUND:
-			update_recv_play_sound(rdp->update, s);
+//			update_recv_play_sound(rdp->update, s);
 			break;
 
 		case DATA_PDU_TYPE_SUPPRESS_OUTPUT:
@@ -882,7 +882,7 @@ rdpRdp* rdp_new(freerdp* instance)
 		rdp->transport   = transport_new(rdp->settings);
 		rdp->license     = license_new(rdp);
 //		rdp->input       = input_new(rdp);
-		rdp->update      = update_new(rdp);
+//		rdp->update      = update_new(rdp);
 		rdp->fastpath    = fastpath_new(rdp);
 		rdp->nego        = nego_new(rdp->transport);
 		rdp->mcs         = mcs_new(rdp->transport);
@@ -911,7 +911,7 @@ void rdp_free(rdpRdp* rdp)
 		transport_free(rdp->transport);
 		license_free(rdp->license);
 //		input_free(rdp->input);
-		update_free(rdp->update);
+//		update_free(rdp->update);
 		fastpath_free(rdp->fastpath);
 		nego_free(rdp->nego);
 		mcs_free(rdp->mcs);

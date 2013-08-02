@@ -25,7 +25,7 @@
 
 #include "orders.h"
 #include "per.h"
-#include "update.h"
+//#include "update.h"
 //#include "surface.h"
 
 #include "fastpath.h"
@@ -136,24 +136,24 @@ static void fastpath_recv_orders(rdpFastPath* fastpath, STREAM* s)
 
 static void fastpath_recv_update_common(rdpFastPath* fastpath, STREAM* s)
 {
-	uint16 updateType;
-	rdpUpdate* update = fastpath->rdp->update;
-	rdpContext* context = update->context;
-
-	stream_read_uint16(s, updateType); /* updateType (2 bytes) */
-
-	switch (updateType)
-	{
-		case UPDATE_TYPE_BITMAP:
-			update_read_bitmap(update, s, &update->bitmap_update);
-			IFCALL(update->BitmapUpdate, context, &update->bitmap_update);
-			break;
-
-		case UPDATE_TYPE_PALETTE:
-			update_read_palette(update, s, &update->palette_update);
-			IFCALL(update->Palette, context, &update->palette_update);
-			break;
-	}
+//	uint16 updateType;
+//	rdpUpdate* update = fastpath->rdp->update;
+//	rdpContext* context = update->context;
+//
+//	stream_read_uint16(s, updateType); /* updateType (2 bytes) */
+//
+//	switch (updateType)
+//	{
+//		case UPDATE_TYPE_BITMAP:
+//			update_read_bitmap(update, s, &update->bitmap_update);
+//			IFCALL(update->BitmapUpdate, context, &update->bitmap_update);
+//			break;
+//
+//		case UPDATE_TYPE_PALETTE:
+//			update_read_palette(update, s, &update->palette_update);
+//			IFCALL(update->Palette, context, &update->palette_update);
+//			break;
+//	}
 }
 
 static void fastpath_recv_update_synchronize(rdpFastPath* fastpath, STREAM* s)
@@ -163,64 +163,64 @@ static void fastpath_recv_update_synchronize(rdpFastPath* fastpath, STREAM* s)
 
 static void fastpath_recv_update(rdpFastPath* fastpath, uint8 updateCode, uint32 size, STREAM* s)
 {
-	rdpUpdate* update = fastpath->rdp->update;
-	rdpContext* context = fastpath->rdp->update->context;
-	rdpPointerUpdate* pointer = update->pointer;
-
-	switch (updateCode)
-	{
-		case FASTPATH_UPDATETYPE_ORDERS:
-			fastpath_recv_orders(fastpath, s);
-			break;
-
-		case FASTPATH_UPDATETYPE_BITMAP:
-		case FASTPATH_UPDATETYPE_PALETTE:
-			fastpath_recv_update_common(fastpath, s);
-			break;
-
-		case FASTPATH_UPDATETYPE_SYNCHRONIZE:
-			fastpath_recv_update_synchronize(fastpath, s);
-			IFCALL(update->Synchronize, context);
-			break;
-
-		case FASTPATH_UPDATETYPE_SURFCMDS:
+//	rdpUpdate* update = fastpath->rdp->update;
+//	rdpContext* context = fastpath->rdp->update->context;
+//	rdpPointerUpdate* pointer = update->pointer;
+//
+//	switch (updateCode)
+//	{
+//		case FASTPATH_UPDATETYPE_ORDERS:
+//			fastpath_recv_orders(fastpath, s);
+//			break;
+//
+//		case FASTPATH_UPDATETYPE_BITMAP:
+//		case FASTPATH_UPDATETYPE_PALETTE:
+//			fastpath_recv_update_common(fastpath, s);
+//			break;
+//
+//		case FASTPATH_UPDATETYPE_SYNCHRONIZE:
+//			fastpath_recv_update_synchronize(fastpath, s);
+//			IFCALL(update->Synchronize, context);
+//			break;
+//
+//		case FASTPATH_UPDATETYPE_SURFCMDS:
 //			update_recv_surfcmds(update, size, s);
-			break;
-
-		case FASTPATH_UPDATETYPE_PTR_NULL:
-			pointer->pointer_system.type = SYSPTR_NULL;
-			IFCALL(pointer->PointerSystem, context, &pointer->pointer_system);
-			break;
-
-		case FASTPATH_UPDATETYPE_PTR_DEFAULT:
-			update->pointer->pointer_system.type = SYSPTR_DEFAULT;
-			IFCALL(pointer->PointerSystem, context, &pointer->pointer_system);
-			break;
-
-		case FASTPATH_UPDATETYPE_PTR_POSITION:
-			update_read_pointer_position(s, &pointer->pointer_position);
-			IFCALL(pointer->PointerPosition, context, &pointer->pointer_position);
-			break;
-
-		case FASTPATH_UPDATETYPE_COLOR:
-			update_read_pointer_color(s, &pointer->pointer_color);
-			IFCALL(pointer->PointerColor, context, &pointer->pointer_color);
-			break;
-
-		case FASTPATH_UPDATETYPE_CACHED:
-			update_read_pointer_cached(s, &pointer->pointer_cached);
-			IFCALL(pointer->PointerCached, context, &pointer->pointer_cached);
-			break;
-
-		case FASTPATH_UPDATETYPE_POINTER:
-			update_read_pointer_new(s, &pointer->pointer_new);
-			IFCALL(pointer->PointerNew, context, &pointer->pointer_new);
-			break;
-
-		default:
-			DEBUG_WARN("unknown updateCode 0x%X", updateCode);
-			break;
-	}
+//			break;
+//
+//		case FASTPATH_UPDATETYPE_PTR_NULL:
+//			pointer->pointer_system.type = SYSPTR_NULL;
+//			IFCALL(pointer->PointerSystem, context, &pointer->pointer_system);
+//			break;
+//
+//		case FASTPATH_UPDATETYPE_PTR_DEFAULT:
+//			update->pointer->pointer_system.type = SYSPTR_DEFAULT;
+//			IFCALL(pointer->PointerSystem, context, &pointer->pointer_system);
+//			break;
+//
+//		case FASTPATH_UPDATETYPE_PTR_POSITION:
+//			update_read_pointer_position(s, &pointer->pointer_position);
+//			IFCALL(pointer->PointerPosition, context, &pointer->pointer_position);
+//			break;
+//
+//		case FASTPATH_UPDATETYPE_COLOR:
+//			update_read_pointer_color(s, &pointer->pointer_color);
+//			IFCALL(pointer->PointerColor, context, &pointer->pointer_color);
+//			break;
+//
+//		case FASTPATH_UPDATETYPE_CACHED:
+//			update_read_pointer_cached(s, &pointer->pointer_cached);
+//			IFCALL(pointer->PointerCached, context, &pointer->pointer_cached);
+//			break;
+//
+//		case FASTPATH_UPDATETYPE_POINTER:
+//			update_read_pointer_new(s, &pointer->pointer_new);
+//			IFCALL(pointer->PointerNew, context, &pointer->pointer_new);
+//			break;
+//
+//		default:
+//			DEBUG_WARN("unknown updateCode 0x%X", updateCode);
+//			break;
+//	}
 }
 
 static void fastpath_recv_update_data(rdpFastPath* fastpath, STREAM* s)
