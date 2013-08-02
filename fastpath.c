@@ -23,7 +23,7 @@
 #include <freerdp/api.h>
 #include <freerdp/utils/stream.h>
 
-#include "orders.h"
+//#include "orders.h"
 #include "per.h"
 //#include "update.h"
 //#include "surface.h"
@@ -129,7 +129,7 @@ static void fastpath_recv_orders(rdpFastPath* fastpath, STREAM* s)
 
 	while (numberOrders > 0)
 	{
-		update_recv_order(update, s);
+//		update_recv_order(update, s);
 		numberOrders--;
 	}
 }
