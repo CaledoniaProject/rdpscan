@@ -141,7 +141,7 @@ boolean tcp_connect(rdpTcp* tcp, const char* hostname, uint16 port)
 
 		if (connect(tcp->sockfd, ai->ai_addr, ai->ai_addrlen) == 0)
 		{
-			printf("connected to %s:%s\n", hostname, servname);
+//			printf("connected to %s:%s\n", hostname, servname);
 			break;
 		}
 

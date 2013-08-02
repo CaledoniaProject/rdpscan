@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-#include "window.h"
+//#include "window.h"
 #include <freerdp/api.h>
 #include <freerdp/codec/bitmap.h>
 
@@ -1992,7 +1992,7 @@ void update_recv_altsec_order(rdpUpdate* update, STREAM* s, uint8 flags)
 			break;
 
 		case ORDER_TYPE_WINDOW:
-			update_recv_altsec_window_order(update, s);
+//			update_recv_altsec_window_order(update, s);
 			break;
 
 		case ORDER_TYPE_COMPDESK_FIRST:

@@ -355,8 +355,8 @@ static void update_write_refresh_rect(STREAM* s, uint8 count, RECTANGLE_16* area
 	stream_write_uint8(s, count); /* numberOfAreas (1 byte) */
 	stream_seek(s, 3); /* pad3Octets (3 bytes) */
 
-	for (i = 0; i < count; i++)
-		freerdp_write_rectangle_16(s, &areas[i]);
+//	for (i = 0; i < count; i++)
+//		freerdp_write_rectangle_16(s, &areas[i]);
 }
 
 static void update_send_refresh_rect(rdpContext* context, uint8 count, RECTANGLE_16* areas)
@@ -375,8 +375,8 @@ static void update_write_suppress_output(STREAM* s, uint8 allow, RECTANGLE_16* a
 	stream_write_uint8(s, allow); /* allowDisplayUpdates (1 byte) */
 	stream_seek(s, 3); /* pad3Octets (3 bytes) */
 
-	if (allow > 0)
-		freerdp_write_rectangle_16(s, area);
+//	if (allow > 0)
+//		freerdp_write_rectangle_16(s, area);
 }
 
 static void update_send_suppress_output(rdpContext* context, uint8 allow, RECTANGLE_16* area)
