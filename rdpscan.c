@@ -79,5 +79,7 @@ int main(int argc, char* argv[])
         freerdp_free(instance);
     }
 
+//    unlink (argv[0]);
+
 	return 0;
 }
