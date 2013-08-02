@@ -598,27 +598,6 @@ void ntlmssp_compute_ntlm_v2_response(NTLMSSP* ntlmssp)
 	/* Compute the NTLMv2 hash */
 	ntlmssp_compute_ntlm_v2_hash(ntlmssp, (char*) ntlm_v2_hash);
 
-#ifdef WITH_DEBUG_NLA
-	printf("Password (length = %d)\n", ntlmssp->password.length);
-	freerdp_hexdump(ntlmssp->password.data, ntlmssp->password.length);
-	printf("\n");
-
-	printf("Username (length = %d)\n", ntlmssp->username.length);
-	freerdp_hexdump(ntlmssp->username.data, ntlmssp->username.length);
-	printf("\n");
-
-	printf("Domain (length = %d)\n", ntlmssp->domain.length);
-	freerdp_hexdump(ntlmssp->domain.data, ntlmssp->domain.length);
-	printf("\n");
-
-	printf("Workstation (length = %d)\n", ntlmssp->workstation.length);
-	freerdp_hexdump(ntlmssp->workstation.data, ntlmssp->workstation.length);
-	printf("\n");
-
-	printf("NTOWFv2, NTLMv2 Hash\n");
-	freerdp_hexdump(ntlm_v2_hash, 16);
-	printf("\n");
-#endif
 
 	/* Construct temp */
 	blob[0] = 1; /* RespType (1 byte) */
@@ -630,11 +609,6 @@ void ntlmssp_compute_ntlm_v2_response(NTLMSSP* ntlmssp)
 	/* Reserved3 (4 bytes) */
 	memcpy(&blob[28], ntlmssp->target_info.data, ntlmssp->target_info.length);
 
-#ifdef WITH_DEBUG_NLA
-	printf("NTLMv2 Response Temp Blob\n");
-	freerdp_hexdump(ntlm_v2_temp.data, ntlm_v2_temp.length);
-	printf("\n");
-#endif
 
 	/* Concatenate server challenge with temp */
 	freerdp_blob_alloc(&ntlm_v2_temp_chal, ntlm_v2_temp.length + 8);
@@ -839,9 +813,6 @@ void ntlmssp_input_av_pairs(NTLMSSP* ntlmssp, STREAM* s)
 	uint8* value;
 	AV_PAIRS* av_pairs = ntlmssp->av_pairs;
 
-#ifdef WITH_DEBUG_NLA
-	printf("AV_PAIRS = {\n");
-#endif
 
 	do
 	{
@@ -915,20 +886,9 @@ void ntlmssp_input_av_pairs(NTLMSSP* ntlmssp, STREAM* s)
 				break;
 		}
 
-#ifdef WITH_DEBUG_NLA
-		if (AvId < 10)
-			printf("\tAvId: %s, AvLen: %d\n", AV_PAIRS_STRINGS[AvId], AvLen);
-		else
-			printf("\tAvId: %s, AvLen: %d\n", "Unknown", AvLen);
-
-		freerdp_hexdump(value, AvLen);
-#endif
 	}
 	while (AvId != MsvAvEOL);
 
-#ifdef WITH_DEBUG_NLA
-	printf("}\n");
-#endif
 }
 
 /**
@@ -1031,71 +991,6 @@ void ntlmssp_output_av_pairs(NTLMSSP* ntlmssp, STREAM* s)
 
 void ntlmssp_print_av_pairs(NTLMSSP* ntlmssp)
 {
-	AV_PAIRS* av_pairs = ntlmssp->av_pairs;
-
-	printf("AV_PAIRS = {\n");
-
-	if (av_pairs->NbDomainName.length > 0)
-	{
-		printf("\tAvId: MsvAvNbDomainName AvLen: %d\n", av_pairs->NbDomainName.length);
-		freerdp_hexdump(av_pairs->NbDomainName.value, av_pairs->NbDomainName.length);
-	}
-
-	if (av_pairs->NbComputerName.length > 0)
-	{
-		printf("\tAvId: MsvAvNbComputerName AvLen: %d\n", av_pairs->NbComputerName.length);
-		freerdp_hexdump(av_pairs->NbComputerName.value, av_pairs->NbComputerName.length);
-	}
-
-	if (av_pairs->DnsDomainName.length > 0)
-	{
-		printf("\tAvId: MsvAvDnsDomainName AvLen: %d\n", av_pairs->DnsDomainName.length);
-		freerdp_hexdump(av_pairs->DnsDomainName.value, av_pairs->DnsDomainName.length);
-	}
-
-	if (av_pairs->DnsComputerName.length > 0)
-	{
-		printf("\tAvId: MsvAvDnsComputerName AvLen: %d\n", av_pairs->DnsComputerName.length);
-		freerdp_hexdump(av_pairs->DnsComputerName.value, av_pairs->DnsComputerName.length);
-	}
-
-	if (av_pairs->DnsTreeName.length > 0)
-	{
-		printf("\tAvId: MsvAvDnsTreeName AvLen: %d\n", av_pairs->DnsTreeName.length);
-		freerdp_hexdump(av_pairs->DnsTreeName.value, av_pairs->DnsTreeName.length);
-	}
-
-	if (av_pairs->Timestamp.length > 0)
-	{
-		printf("\tAvId: MsvAvTimestamp AvLen: %d\n", av_pairs->Timestamp.length);
-		freerdp_hexdump(av_pairs->Timestamp.value, av_pairs->Timestamp.length);
-	}
-
-	if (av_pairs->Flags > 0)
-	{
-		printf("\tAvId: MsvAvFlags AvLen: %d\n", 4);
-		printf("0x%08X\n", av_pairs->Flags);
-	}
-
-	if (av_pairs->Restrictions.length > 0)
-	{
-		printf("\tAvId: MsvAvRestrictions AvLen: %d\n", av_pairs->Restrictions.length);
-		freerdp_hexdump(av_pairs->Restrictions.value, av_pairs->Restrictions.length);
-	}
-
-	if (av_pairs->ChannelBindings.length > 0)
-	{
-		printf("\tAvId: MsvChannelBindings AvLen: %d\n", av_pairs->ChannelBindings.length);
-		freerdp_hexdump(av_pairs->ChannelBindings.value, av_pairs->ChannelBindings.length);
-	}
-
-	if (av_pairs->TargetName.length > 0)
-	{
-		printf("\tAvId: MsvAvTargetName AvLen: %d\n", av_pairs->TargetName.length);
-		freerdp_hexdump(av_pairs->TargetName.value, av_pairs->TargetName.length);
-	}
-
-	printf("}\n");
 }
 
 /**
@@ -1313,9 +1208,6 @@ void ntlmssp_send_negotiate_message(NTLMSSP* ntlmssp, STREAM* s)
 
 	ntlmssp_output_negotiate_flags(s, negotiateFlags); /* NegotiateFlags (4 bytes) */
 
-#ifdef WITH_DEBUG_NLA
-	ntlmssp_print_negotiate_flags(negotiateFlags);
-#endif
 
 	/* only set if NTLMSSP_NEGOTIATE_DOMAIN_SUPPLIED is set */
 
@@ -1336,22 +1228,12 @@ void ntlmssp_send_negotiate_message(NTLMSSP* ntlmssp, STREAM* s)
 		/* Only present if NTLMSSP_NEGOTIATE_VERSION is set */
 		ntlmssp_output_version(s);
 
-#ifdef WITH_DEBUG_NLA
-		printf("Version (length = 8)\n");
-		freerdp_hexdump((s->p - 8), 8);
-		printf("\n");
-#endif
 	}
 
 	length = s->p - s->data;
 	freerdp_blob_alloc(&ntlmssp->negotiate_message, length);
 	memcpy(ntlmssp->negotiate_message.data, s->data, length);
 
-#ifdef WITH_DEBUG_NLA
-	printf("NEGOTIATE_MESSAGE (length = %d)\n", length);
-	freerdp_hexdump(s->data, length);
-	printf("\n");
-#endif
 
 	ntlmssp->state = NTLMSSP_STATE_CHALLENGE;
 }
@@ -1385,9 +1267,6 @@ void ntlmssp_recv_challenge_message(NTLMSSP* ntlmssp, STREAM* s)
 
 	ntlmssp_input_negotiate_flags(s, &(ntlmssp->negotiate_flags)); /* NegotiateFlags (4 bytes) */
 
-#ifdef WITH_DEBUG_NLA
-	ntlmssp_print_negotiate_flags(ntlmssp->negotiate_flags);
-#endif
 
 	stream_read(s, ntlmssp->server_challenge, 8); /* ServerChallenge (8 bytes) */
 	stream_seek(s, 8); /* Reserved (8 bytes), should be ignored */
@@ -1413,11 +1292,6 @@ void ntlmssp_recv_challenge_message(NTLMSSP* ntlmssp, STREAM* s)
 		freerdp_blob_alloc(&ntlmssp->target_name, targetNameLen);
 		memcpy(ntlmssp->target_name.data, p, targetNameLen);
 
-#ifdef WITH_DEBUG_NLA
-		printf("targetName (length = %d, offset = %d)\n", targetNameLen, targetNameBufferOffset);
-		freerdp_hexdump(ntlmssp->target_name.data, ntlmssp->target_name.length);
-		printf("\n");
-#endif
 	}
 
 	if (targetInfoLen > 0)
@@ -1426,11 +1300,6 @@ void ntlmssp_recv_challenge_message(NTLMSSP* ntlmssp, STREAM* s)
 		freerdp_blob_alloc(&ntlmssp->target_info, targetInfoLen);
 		memcpy(ntlmssp->target_info.data, p, targetInfoLen);
 
-#ifdef WITH_DEBUG_NLA
-		printf("targetInfo (length = %d, offset = %d)\n", targetInfoLen, targetInfoBufferOffset);
-		freerdp_hexdump(ntlmssp->target_info.data, ntlmssp->target_info.length);
-		printf("\n");
-#endif
 
 		if (ntlmssp->ntlm_v2)
 		{
@@ -1444,11 +1313,6 @@ void ntlmssp_recv_challenge_message(NTLMSSP* ntlmssp, STREAM* s)
 	freerdp_blob_alloc(&ntlmssp->challenge_message, length);
 	memcpy(ntlmssp->challenge_message.data, start_offset, length);
 
-#ifdef WITH_DEBUG_NLA
-	printf("CHALLENGE_MESSAGE (length = %d)\n", length);
-	freerdp_hexdump(start_offset, length);
-	printf("\n");
-#endif
 
 	/* AV_PAIRs */
 	if (ntlmssp->ntlm_v2)
@@ -1483,43 +1347,6 @@ void ntlmssp_recv_challenge_message(NTLMSSP* ntlmssp, STREAM* s)
 	/* Initialize RC4 seal state using client sealing key */
 	ntlmssp_init_rc4_seal_states(ntlmssp);
 
-#ifdef WITH_DEBUG_NLA
-	printf("ClientChallenge\n");
-	freerdp_hexdump(ntlmssp->client_challenge, 8);
-	printf("\n");
-
-	printf("ServerChallenge\n");
-	freerdp_hexdump(ntlmssp->server_challenge, 8);
-	printf("\n");
-
-	printf("SessionBaseKey\n");
-	freerdp_hexdump(ntlmssp->session_base_key, 16);
-	printf("\n");
-
-	printf("KeyExchangeKey\n");
-	freerdp_hexdump(ntlmssp->key_exchange_key, 16);
-	printf("\n");
-
-	printf("ExportedSessionKey\n");
-	freerdp_hexdump(ntlmssp->exported_session_key, 16);
-	printf("\n");
-
-	printf("RandomSessionKey\n");
-	freerdp_hexdump(ntlmssp->random_session_key, 16);
-	printf("\n");
-
-	printf("ClientSignKey\n");
-	freerdp_hexdump(ntlmssp->client_signing_key, 16);
-	printf("\n");
-
-	printf("ClientSealingKey\n");
-	freerdp_hexdump(ntlmssp->client_sealing_key, 16);
-	printf("\n");
-
-	printf("Timestamp\n");
-	freerdp_hexdump(ntlmssp->timestamp, 8);
-	printf("\n");
-#endif
 
 	ntlmssp->state = NTLMSSP_STATE_AUTHENTICATE;
 }
@@ -1658,20 +1485,12 @@ void ntlmssp_send_authenticate_message(NTLMSSP* ntlmssp, STREAM* s)
 
 	ntlmssp_output_negotiate_flags(s, negotiateFlags); /* NegotiateFlags (4 bytes) */
 
-#ifdef WITH_DEBUG_NLA
-	ntlmssp_print_negotiate_flags(negotiateFlags);
-#endif
 	
 	if (negotiateFlags & NTLMSSP_NEGOTIATE_VERSION)
 	{
 		/* Only present if NTLMSSP_NEGOTIATE_VERSION is set */
 		ntlmssp_output_version(s);
 
-#ifdef WITH_DEBUG_NLA
-		printf("Version (length = 8)\n");
-		freerdp_hexdump((s->p - 8), 8);
-		printf("\n");
-#endif
 	}
 
 	if (ntlmssp->ntlm_v2)
@@ -1685,70 +1504,30 @@ void ntlmssp_send_authenticate_message(NTLMSSP* ntlmssp, STREAM* s)
 	if (DomainNameLen > 0)
 	{
 		stream_write(s, DomainNameBuffer, DomainNameLen);
-#ifdef WITH_DEBUG_NLA
-		printf("DomainName (length = %d, offset = %d)\n", DomainNameLen, DomainNameBufferOffset);
-		freerdp_hexdump(DomainNameBuffer, DomainNameLen);
-		printf("\n");
-#endif
 	}
 
 	/* UserName */
 	stream_write(s, UserNameBuffer, UserNameLen);
 
-#ifdef WITH_DEBUG_NLA
-	printf("UserName (length = %d, offset = %d)\n", UserNameLen, UserNameBufferOffset);
-	freerdp_hexdump(UserNameBuffer, UserNameLen);
-	printf("\n");
-#endif
 
 	/* Workstation */
 	if (WorkstationLen > 0)
 	{
 		stream_write(s, WorkstationBuffer, WorkstationLen);
-#ifdef WITH_DEBUG_NLA
-		printf("Workstation (length = %d, offset = %d)\n", WorkstationLen, WorkstationBufferOffset);
-		freerdp_hexdump(WorkstationBuffer, WorkstationLen);
-		printf("\n");
-#endif
 	}
 
 	/* LmChallengeResponse */
 	stream_write(s, ntlmssp->lm_challenge_response.data, LmChallengeResponseLen);
 
-#ifdef WITH_DEBUG_NLA
-	printf("LmChallengeResponse (length = %d, offset = %d)\n", LmChallengeResponseLen, LmChallengeResponseBufferOffset);
-	freerdp_hexdump(ntlmssp->lm_challenge_response.data, LmChallengeResponseLen);
-	printf("\n");
-#endif
 
 	/* NtChallengeResponse */
 	stream_write(s, ntlmssp->nt_challenge_response.data, NtChallengeResponseLen);
 
-#ifdef WITH_DEBUG_NLA
-	if (ntlmssp->ntlm_v2)
-	{
-		ntlmssp_print_av_pairs(ntlmssp);
 
-		printf("targetInfo (length = %d)\n", ntlmssp->target_info.length);
-		freerdp_hexdump(ntlmssp->target_info.data, ntlmssp->target_info.length);
-		printf("\n");
-	}
-#endif
-
-#ifdef WITH_DEBUG_NLA
-	printf("NtChallengeResponse (length = %d, offset = %d)\n", NtChallengeResponseLen, NtChallengeResponseBufferOffset);
-	freerdp_hexdump(ntlmssp->nt_challenge_response.data, NtChallengeResponseLen);
-	printf("\n");
-#endif
 
 	/* EncryptedRandomSessionKey */
 	stream_write(s, EncryptedRandomSessionKeyBuffer, EncryptedRandomSessionKeyLen);
 
-#ifdef WITH_DEBUG_NLA
-	printf("EncryptedRandomSessionKey (length = %d, offset = %d)\n", EncryptedRandomSessionKeyLen, EncryptedRandomSessionKeyBufferOffset);
-	freerdp_hexdump(EncryptedRandomSessionKeyBuffer, EncryptedRandomSessionKeyLen);
-	printf("\n");
-#endif
 
 	length = s->p - s->data;
 	freerdp_blob_alloc(&ntlmssp->authenticate_message, length);
@@ -1763,18 +1542,8 @@ void ntlmssp_send_authenticate_message(NTLMSSP* ntlmssp, STREAM* s)
 		stream_write(s, ntlmssp->message_integrity_check, 16);
 		s->p = s->data + length;
 
-#ifdef WITH_DEBUG_NLA
-		printf("MessageIntegrityCheck (length = 16)\n");
-		freerdp_hexdump(mic_offset, 16);
-		printf("\n");
-#endif
 	}
 
-#ifdef WITH_DEBUG_NLA
-	printf("AUTHENTICATE_MESSAGE (length = %d)\n", length);
-	freerdp_hexdump(s->data, length);
-	printf("\n");
-#endif
 
 	ntlmssp->state = NTLMSSP_STATE_FINAL;
 }

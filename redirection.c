@@ -68,9 +68,6 @@ boolean rdp_recv_server_redirection_pdu(rdpRdp* rdp, STREAM* s)
 
 	DEBUG_REDIR("flags: 0x%04X, length:%d, sessionID:0x%08X", flags, length, redirection->sessionID);
 
-#ifdef WITH_DEBUG_REDIR
-	rdp_print_redirection_flags(redirection->flags);
-#endif
 
 	if (redirection->flags & LB_TARGET_NET_ADDRESS)
 	{
@@ -84,10 +81,6 @@ boolean rdp_recv_server_redirection_pdu(rdpRdp* rdp, STREAM* s)
 		stream_read_uint32(s, loadBalanceInfoLength);
 		freerdp_blob_alloc(&redirection->loadBalanceInfo, loadBalanceInfoLength);
 		stream_read(s, redirection->loadBalanceInfo.data, loadBalanceInfoLength);
-#ifdef WITH_DEBUG_REDIR
-		DEBUG_REDIR("loadBalanceInfo:");
-		freerdp_hexdump(redirection->loadBalanceInfo.data, redirection->loadBalanceInfo.length);
-#endif
 	}
 
 	if (redirection->flags & LB_USERNAME)
@@ -109,10 +102,6 @@ boolean rdp_recv_server_redirection_pdu(rdpRdp* rdp, STREAM* s)
 		freerdp_blob_alloc(&redirection->password_cookie, passwordLength);
 		stream_read(s, redirection->password_cookie.data, passwordLength);
 
-#ifdef WITH_DEBUG_REDIR
-		DEBUG_REDIR("password_cookie:");
-		freerdp_hexdump(redirection->password_cookie.data, redirection->password_cookie.length);
-#endif
 	}
 
 	if (redirection->flags & LB_TARGET_FQDN)

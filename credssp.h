@@ -30,7 +30,7 @@ typedef struct rdp_credssp rdpCredssp;
 #include <freerdp/utils/blob.h>
 #include <freerdp/utils/memory.h>
 #include <freerdp/utils/stream.h>
-#include <freerdp/utils/hexdump.h>
+//#include <freerdp/utils/hexdump.h>
 
 #include "ntlmssp.h"
 

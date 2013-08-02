@@ -21,51 +21,6 @@
 
 #include "license.h"
 
-#ifdef WITH_DEBUG_LICENSE
-static const char* const LICENSE_MESSAGE_STRINGS[] =
-{
-		"",
-		"License Request",
-		"Platform Challenge",
-		"New License",
-		"Upgrade License",
-		"", "", "", "", "", "",
-		"", "", "", "", "", "",
-		"",
-		"License Info",
-		"New License Request",
-		"",
-		"Platform Challenge Response",
-		"", "", "", "", "", "", "", "", "",
-		"Error Alert"
-};
-
-static const char* const error_codes[] =
-{
-	"ERR_UNKNOWN",
-	"ERR_INVALID_SERVER_CERTIFICATE",
-	"ERR_NO_LICENSE",
-	"ERR_INVALID_MAC",
-	"ERR_INVALID_SCOPE",
-	"ERR_UNKNOWN",
-	"ERR_NO_LICENSE_SERVER",
-	"STATUS_VALID_CLIENT",
-	"ERR_INVALID_CLIENT",
-	"ERR_UNKNOWN",
-	"ERR_UNKNOWN",
-	"ERR_INVALID_PRODUCT_ID",
-	"ERR_INVALID_MESSAGE_LENGTH"
-};
-
-static const char* const  state_transitions[] =
-{
-	"ST_UNKNOWN",
-	"ST_TOTAL_ABORT",
-	"ST_NO_TRANSITION",
-	"ST_RESET_PHASE_TO_START",
-	"ST_RESEND_LAST_MESSAGE"
-};
-#endif
 
 /**
  * Read a licensing preamble.\n
@@ -146,10 +101,6 @@ boolean license_send(rdpLicense* license, STREAM* s, uint8 type)
 	rdp_write_security_header(s, sec_flags);
 	license_write_preamble(s, type, flags, wMsgSize);
 
-#ifdef WITH_DEBUG_LICENSE
-	printf("Sending %s Packet, length %d\n", LICENSE_MESSAGE_STRINGS[type & 0x1F], wMsgSize);
-	freerdp_hexdump(s->p - 4, wMsgSize);
-#endif
 
 	stream_set_pos(s, length);
 	if (transport_write(license->rdp->transport, s) < 0)
@@ -258,28 +209,6 @@ void license_generate_keys(rdpLicense* license)
 	security_licensing_encryption_key(license->session_key_blob, license->client_random,
 			license->server_random, license->licensing_encryption_key); /* LicensingEncryptionKey */
 
-#ifdef WITH_DEBUG_LICENSE
-	printf("ClientRandom:\n");
-	freerdp_hexdump(license->client_random, CLIENT_RANDOM_LENGTH);
-
-	printf("ServerRandom:\n");
-	freerdp_hexdump(license->server_random, SERVER_RANDOM_LENGTH);
-
-	printf("PremasterSecret:\n");
-	freerdp_hexdump(license->premaster_secret, PREMASTER_SECRET_LENGTH);
-
-	printf("MasterSecret:\n");
-	freerdp_hexdump(license->master_secret, MASTER_SECRET_LENGTH);
-
-	printf("SessionKeyBlob:\n");
-	freerdp_hexdump(license->session_key_blob, SESSION_KEY_BLOB_LENGTH);
-
-	printf("MacSaltKey:\n");
-	freerdp_hexdump(license->mac_salt_key, MAC_SALT_KEY_LENGTH);
-
-	printf("LicensingEncryptionKey:\n");
-	freerdp_hexdump(license->licensing_encryption_key, LICENSING_ENCRYPTION_KEY_LENGTH);
-#endif
 }
 
 /**
@@ -318,13 +247,6 @@ void license_encrypt_premaster_secret(rdpLicense* license)
 	modulus = certificate->cert_info.modulus.data;
 	key_length = certificate->cert_info.modulus.length;
 
-#ifdef WITH_DEBUG_LICENSE
-	printf("modulus (%d bits):\n", key_length * 8);
-	freerdp_hexdump(modulus, key_length);
-
-	printf("exponent:\n");
-	freerdp_hexdump(exponent, 4);
-#endif
 
 	encrypted_premaster_secret = (uint8*) xmalloc(MODULUS_MAX_SIZE);
 	memset(encrypted_premaster_secret, 0, MODULUS_MAX_SIZE);
@@ -360,14 +282,6 @@ void license_decrypt_platform_challenge(rdpLicense* license)
 			license->encrypted_platform_challenge->data,
 			license->platform_challenge->data);
 
-#ifdef WITH_DEBUG_LICENSE
-	printf("encrypted_platform challenge:\n");
-	freerdp_hexdump(license->encrypted_platform_challenge->data,
-			license->encrypted_platform_challenge->length);
-
-	printf("platform challenge:\n");
-	freerdp_hexdump(license->platform_challenge->data, license->platform_challenge->length);
-#endif
 
 	crypto_rc4_free(rc4);
 }
@@ -685,10 +599,6 @@ void license_read_error_alert_packet(rdpLicense* license, STREAM* s)
 	stream_read_uint32(s, dwStateTransition); /* dwStateTransition (4 bytes) */
 	license_read_binary_blob(s, license->error_info); /* bbErrorInfo */
 
-#ifdef WITH_DEBUG_LICENSE
-	printf("dwErrorCode: %s, dwStateTransition: %s\n",
-			error_codes[dwErrorCode], state_transitions[dwStateTransition]);
-#endif
 
 	if (dwErrorCode == STATUS_VALID_CLIENT)
 	{
@@ -834,16 +744,6 @@ void license_send_platform_challenge_response_packet(rdpLicense* license)
 	crypto_rc4(rc4, HWID_LENGTH, license->hwid, buffer);
 	crypto_rc4_free(rc4);
 
-#ifdef WITH_DEBUG_LICENSE
-	printf("Licensing Encryption Key:\n");
-	freerdp_hexdump(license->licensing_encryption_key, 16);
-
-	printf("HardwareID:\n");
-	freerdp_hexdump(license->hwid, 20);
-
-	printf("Encrypted HardwareID:\n");
-	freerdp_hexdump(buffer, 20);
-#endif
 
 	license->encrypted_hwid->type = BB_DATA_BLOB;
 	license->encrypted_hwid->data = buffer;

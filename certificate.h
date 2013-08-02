@@ -30,7 +30,7 @@ typedef struct rdp_certificate_store rdpCertificateStore;
 #include <freerdp/settings.h>
 #include <freerdp/utils/blob.h>
 #include <freerdp/utils/stream.h>
-#include <freerdp/utils/hexdump.h>
+//#include <freerdp/utils/hexdump.h>
 
 /* Certificate Version */
 #define CERT_CHAIN_VERSION_1		0x00000001
