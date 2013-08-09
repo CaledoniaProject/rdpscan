@@ -33,53 +33,49 @@ boolean xf_verify_certificate(freerdp* instance, char* subject, char* issuer, ch
     return true;
 }
 
-int xfreerdp_run(freerdp* instance)
+void xf_run(char *hostname, char *user, char *pass, char *domain)
 {
-	if (!freerdp_connect(instance))
-		return 1;
+    freerdp* instance = freerdp_new();
+    instance->PreConnect           = xf_pre_connect;
+    instance->PostConnect          = xf_post_connect;
+    instance->Authenticate         = xf_authenticate;
+    instance->VerifyCertificate    = xf_verify_certificate;
 
-    freerdp_disconnect(instance);
-    return 0;
+    freerdp_context_new(instance);
+
+    instance->settings->hostname = hostname;
+    instance->settings->domain   = domain;
+    instance->settings->username = user;
+    instance->settings->password = pass;
+
+	if (freerdp_connect(instance))
+    {
+        printf ("SUCCESSFUL LOGIN - %s - %s\\%s : %s\n",
+                instance->settings->hostname,
+                instance->settings->domain,
+                instance->settings->username,
+                instance->settings->password);
+    
+        freerdp_disconnect(instance);
+    }
+
+    freerdp_free(instance);
 }
 
 int main(int argc, char* argv[])
 {
-    int i             = 0;
-
-    char *combinations[][4] = {
-        // host, domain, user, cred
-        { "192.168.56.101", NULL, "abc", "abc" },
-        { "192.168.56.101", NULL, "ddd", "ddd" }
-    };
-
-    for (i = 0; i < sizeof (combinations) / sizeof (char*[4]); ++i)
+    switch (argc)
     {
-        freerdp* instance = freerdp_new();
-        instance->PreConnect           = xf_pre_connect;
-        instance->PostConnect          = xf_post_connect;
-        instance->Authenticate         = xf_authenticate;
-        instance->VerifyCertificate    = xf_verify_certificate;
-
-        freerdp_context_new(instance);
-
-        instance->settings->hostname = combinations[i][0];
-        instance->settings->domain   = combinations[i][1];
-        instance->settings->username = combinations[i][2];
-        instance->settings->password = combinations[i][3];
-
-        if (0 == xfreerdp_run (instance))
-        {
-            printf ("Host: %s, Domain: %s,  %s:%s\n", 
-                    instance->settings->hostname,
-                    instance->settings->domain,
-                    instance->settings->username,
-                    instance->settings->password);
-        }
-    
-        freerdp_free(instance);
+        case 4:
+            xf_run (argv[1], argv[2], argv[3], argv[4]);
+            break;
+        case 3:
+            xf_run (argv[1], argv[2], argv[3], NULL);
+            break;
+        default:
+            printf ("Usage:\n\t%s hostname username credential [domain]\n", argv[0]);
+            return 1;
     }
 
-//    unlink (argv[0]);
-
-	return 0;
+    return 0;
 }
