@@ -1,6 +1,6 @@
-### RDPscan
+### RDPscan - Remote desktop protocol password verfication
 
-Remote desktop protocol password verfication
+No external library dependencies, yay ;-P
 
 ### Installation
 
